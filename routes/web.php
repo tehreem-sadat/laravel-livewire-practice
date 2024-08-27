@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Livewire\UserManagement;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\BusinessDetailsForm;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +39,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/users', UserManagement::class)->name('users');
 });
 
-Route::get('/unapproved', function () {
-    return view('unapproved'); // Create a corresponding 'unapproved.blade.php' view file.
-})->name('unapproved');
+
+Route::get('/unapproved', BusinessDetailsForm::class)->name('unapproved');
+
+
+// Route::get('/generic-business-details', BusinessDetailsForm::class)->name('generic.business.details');
+
 
 // Authentication Routes
 require __DIR__.'/auth.php';

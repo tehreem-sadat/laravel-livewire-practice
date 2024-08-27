@@ -17,7 +17,7 @@ class CheckIfApproved
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the user is authenticated and approved
-        if (Auth::check() && !Auth::user()->approved) {
+        if (Auth::check() && (!Auth::user()->approved || !Auth::user()->business_details_filled)) {
             // Redirect to a specific route or show an error message
             return redirect()->route('unapproved'); // Redirect to a page explaining approval is required
         }
