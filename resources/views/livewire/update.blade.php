@@ -11,6 +11,14 @@
         @error('email') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
     </div>
 
+    <div class="form-group">
+        <label for="approved" class="inline-flex items-center">
+            <input type="checkbox" class="form-checkbox" id="approved" {{ $approved ? 'checked' : '' }} wire:model="approved">
+            <span class="ml-2">Approved</span>
+        </label>
+        @error('approved') <span class="text-danger">{{ $message }}</span> @enderror
+    </div>
+
     <div class="flex space-x-4">
         <button type="submit" wire:click.prevent="update()" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Update

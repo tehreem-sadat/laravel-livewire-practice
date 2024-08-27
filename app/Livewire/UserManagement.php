@@ -12,8 +12,10 @@ class UserManagement extends Component
 {
     public $users;
     public $name, $email, $password, $userId;
+    public $approved = false;
     public $updateMode = false;
     public $isModalOpen = false;
+
 
     public function render()
     {
@@ -39,6 +41,7 @@ class UserManagement extends Component
         $this->email = '';
         $this->password = '';
         $this->userId = '';
+        $this->approved = false;
     }
 
     public function store()
@@ -53,6 +56,7 @@ class UserManagement extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
+            'approved' => $this->approved
         ]);
 
         $this->closeModal();
@@ -72,6 +76,7 @@ class UserManagement extends Component
         $this->userId = $id;
         $this->name = $user->name;
         $this->email = $user->email;
+        $this->approved = $user->approved;
         $this->updateMode = true;
         $this->isModalOpen = true;
     }
@@ -87,6 +92,7 @@ class UserManagement extends Component
         $user->update([
             'name' => $this->name,
             'email' => $this->email,
+            'approved' => $this->approved,
         ]);
 
         $this->closeModal();
