@@ -13,11 +13,24 @@ class UserManagement extends Component
     public $users;
     public $name, $email, $password, $userId;
     public $updateMode = false;
+    public $isModalOpen = false;
 
     public function render()
     {
         $this->users = User::all();
         return view('livewire.user-management')->layout('layouts.app');
+    }
+
+    public function openModal()
+    {
+        $this->isModalOpen = true;
+    }
+
+    public function closeModal()
+    {
+        $this->resetInputFields();
+        $this->isModalOpen = false;
+        $this->updateMode = false;
     }
 
     public function resetInputFields()
@@ -42,10 +55,16 @@ class UserManagement extends Component
             'password' => Hash::make($this->password),
         ]);
 
+        $this->closeModal();
         session()->flash('message', 'User Created Successfully.');
-
-        $this->resetInputFields();
     }
+
+    public function create()
+    {
+        $this->updateMode = false;
+        $this->isModalOpen = true;
+    }
+
 
     public function edit($id)
     {
@@ -54,6 +73,7 @@ class UserManagement extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->updateMode = true;
+        $this->isModalOpen = true;
     }
 
     public function update()
@@ -69,10 +89,9 @@ class UserManagement extends Component
             'email' => $this->email,
         ]);
 
-        session()->flash('message', 'User Updated Successfully.');
+        $this->closeModal();
 
-        $this->resetInputFields();
-        $this->updateMode = false;
+        session()->flash('message', 'User Updated Successfully.');
     }
 
     public function delete($id)
