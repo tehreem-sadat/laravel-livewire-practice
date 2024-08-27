@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 
 use App\Livewire\UserManagement;
+use App\Livewire\BusinessDetailsManagement;
+
 use Illuminate\Support\Facades\Route;
 use App\Livewire\BusinessDetailsForm;
 
@@ -42,11 +44,11 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
     // User Management Routes
     Route::get('/users', UserManagement::class)->name('users');
-
+    Route::get('/business-details', BusinessDetailsManagement::class)->name('business.details');
+    Route::get('/view-form/{user}', [UserController::class, 'viewBusinessForm'])->name('view.form');
 
 });
 
-Route::get('/view-form/{user}', [UserController::class, 'viewBusinessForm'])->name('view.form');
 
 
 
