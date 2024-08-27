@@ -17,7 +17,7 @@
         @error('password') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
     </div>
 
-    <div class="flex justify-end">
+    <div class="flex space-x-4">
         <button type="submit" wire:click.prevent="store()" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
             Create
         </button>

@@ -1,3 +1,8 @@
+<x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('User Management') }}
+        </h2>
+    </x-slot>
 <div class="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg mt-10">
     @if (session()->has('message'))
         <div class="mb-4 p-4 text-green-800 bg-green-100 rounded-lg">
