@@ -5,16 +5,24 @@ namespace App\Livewire;
 use Livewire\Component;
 
 use App\Models\User;
+use App\Models\Role;
+
 use Illuminate\Support\Facades\Hash;
 
 
 class UserManagement extends Component
 {
     public $users;
-    public $name, $email, $password, $userId;
+    public $name, $email, $password, $userId, $role;
     public $approved = false;
     public $updateMode = false;
     public $isModalOpen = false;
+    public $roles;
+
+    public function mount()
+    {
+        $this->roles = Role::all();
+    }
 
 
     public function render()
@@ -33,6 +41,7 @@ class UserManagement extends Component
         $this->resetInputFields();
         $this->isModalOpen = false;
         $this->updateMode = false;
+        $this->resetErrorBag();
     }
 
     public function resetInputFields()
@@ -52,12 +61,17 @@ class UserManagement extends Component
             'password' => 'required|min:6',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'approved' => $this->approved
         ]);
+
+        $defaultRole = Role::where('name', 'user')->first();
+        if ($defaultRole) {
+            $user->assignRole($defaultRole);
+        }
 
         $this->closeModal();
         session()->flash('message', 'User Created Successfully.');
@@ -79,6 +93,7 @@ class UserManagement extends Component
         $this->approved = $user->approved;
         $this->updateMode = true;
         $this->isModalOpen = true;
+        $this->role = $user->roles->first()->name;
     }
 
     public function update()
@@ -86,6 +101,8 @@ class UserManagement extends Component
         $validatedData = $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $this->userId,
+            'role' => 'required',
+
         ]);
 
         $user = User::find($this->userId);
@@ -95,6 +112,7 @@ class UserManagement extends Component
             'approved' => $this->approved,
         ]);
 
+        $user->syncRoles($this->role);
         $this->closeModal();
 
         session()->flash('message', 'User Updated Successfully.');
@@ -102,7 +120,14 @@ class UserManagement extends Component
 
     public function delete($id)
     {
-        User::find($id)->delete();
+        $user = User::findOrFail($id);
+
+        // Check if the user is an admin
+        if ($user->hasRole('admin')) {
+            session()->flash('error', 'Admin users cannot be deleted.');
+            return;
+        }
+        $user->delete();
         session()->flash('message', 'User Deleted Successfully.');
     }
 }

@@ -42,6 +42,11 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $defaultRole = Role::where('name', 'user')->first();
+        if ($defaultRole) {
+            $user->assignRole($defaultRole);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
