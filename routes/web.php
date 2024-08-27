@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+
 use App\Livewire\UserManagement;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\BusinessDetailsForm;
+
+use App\Models\User;
+
 
 
 /*
@@ -37,7 +42,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
     // User Management Routes
     Route::get('/users', UserManagement::class)->name('users');
+
+
 });
+
+Route::get('/view-form/{user}', [UserController::class, 'viewBusinessForm'])->name('view.form');
+
 
 
 Route::get('/unapproved', BusinessDetailsForm::class)->name('unapproved');
