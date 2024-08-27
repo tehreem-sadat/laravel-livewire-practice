@@ -50,7 +50,40 @@
         @endif
 
         <div class="overflow-x-auto mt-10">
-            <table class="min-w-full bg-white divide-y divide-gray-200">
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-10 md:hidden">
+            @foreach($users as $user)
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">{{ $user->name }}</h3>
+                    <p><strong>Name:</strong> {{ $user->name }}</p>
+                    <p><strong>Email:</strong> {{ $user->email }}</p>
+                    @if(auth()->user()->hasRole('admin'))
+                        <p><strong>Approved:</strong> {{ $user->approved ? 'Yes' : 'No' }}</p>
+                        <p><strong>Role:</strong> {{ $user->roles->first()->name ?? 'N/A' }}</p>
+                        <p><strong>Business Form:</strong> 
+                            @if($user->business_details_filled)
+                                <a href="{{ route('view.form', $user->id) }}" class="text-indigo-600 hover:text-indigo-900">
+                                    View Form
+                                </a>
+                            @else
+                                <span class="text-gray-500">N/A</span>
+                            @endif
+                        </p>
+                        <div class="mt-4 flex space-x-2">
+                            <button wire:click="edit({{ $user->id }})" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button wire:click="delete({{ $user->id }})" class="inline-flex items-center px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+
+
+
+            <table class="min-w-full bg-white divide-y divide-gray-200 max-md:hidden">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
