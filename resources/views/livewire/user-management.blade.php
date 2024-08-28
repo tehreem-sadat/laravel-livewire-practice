@@ -80,9 +80,6 @@
                 </div>
             @endforeach
         </div>
-
-
-
             <table class="min-w-full bg-white divide-y divide-gray-200 max-md:hidden">
                 <thead class="bg-gray-50">
                     <tr>
@@ -114,11 +111,21 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button wire:click="edit({{ $user->id }})" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <button  wire:loading.attr="disabled" wire:click="edit({{ $user->id }})" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button wire:click="delete({{ $user->id }})" class="inline-flex items-center px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2">
+                                    <button 
+                                        wire:click="delete({{ $user->id }})"
+                                        wire:loading.attr="disabled"
+                                        class="inline-flex items-center px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2">
+                                        
                                         <i class="fas fa-trash"></i>
+                                        
+                                        <!-- Display this text only if the button is not loading -->
+                                        <span class="ml-2" wire:loading.remove wire:target="delete({{ $user->id }})">Delete</span>
+                                        
+                                        <!-- Show spinner only if this user is being processed -->
+                                        <span wire:loading wire:target="delete({{ $user->id }})" class="ml-2 spinner-border animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
                                     </button>
                                 </td>
                             @endif

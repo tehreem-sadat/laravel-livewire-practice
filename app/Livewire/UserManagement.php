@@ -18,6 +18,8 @@ class UserManagement extends Component
     public $updateMode = false;
     public $isModalOpen = false;
     public $roles;
+    public $isLoading = false;
+    public $processingUserId = null; 
 
     public function mount()
     {
@@ -55,6 +57,8 @@ class UserManagement extends Component
 
     public function store()
     {
+        $this->isLoading = true;
+
         $validatedData = $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -75,6 +79,7 @@ class UserManagement extends Component
 
         $this->closeModal();
         session()->flash('message', 'User Created Successfully.');
+        $this->isLoading = false;
     }
 
     public function create()
@@ -98,6 +103,7 @@ class UserManagement extends Component
 
     public function update()
     {
+        $this->isLoading = true;
         $validatedData = $this->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $this->userId,
@@ -116,10 +122,16 @@ class UserManagement extends Component
         $this->closeModal();
 
         session()->flash('message', 'User Updated Successfully.');
+        $this->isLoading = false;
+
     }
 
     public function delete($id)
     {
+        $this->isLoading = true;
+        $this->processingUserId = $id;
+        sleep(3);
+
         $user = User::findOrFail($id);
 
         // Check if the user is an admin
@@ -129,5 +141,7 @@ class UserManagement extends Component
         }
         $user->delete();
         session()->flash('message', 'User Deleted Successfully.');
+        $this->isLoading = false;
+        $this->processingUserId = null;
     }
 }
